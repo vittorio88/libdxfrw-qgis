@@ -24,7 +24,7 @@ class dxfReader;
 class dxfWriter;
 
 class dxfRW {
-public:
+  public:
     dxfRW(const char* name);
     ~dxfRW();
     void setDebug(DRW::DBG_LEVEL lvl);
@@ -121,7 +121,7 @@ private:
     /*use version from dwgutil.h*/
     std::string toHexStr(int n);//RLZ removeme
 
-private:
+  private:
     DRW::Version version;
     std::string fileName;
     std::string codePage;
@@ -142,7 +142,6 @@ private:
     std::vector<DRW_ImageDef*> imageDef;  /*!< imageDef list */
 
     int currHandle;
-
 };
 
 #endif // LIBDXFRW_H
