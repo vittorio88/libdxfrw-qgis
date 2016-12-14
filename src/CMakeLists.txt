@@ -1,6 +1,6 @@
 INCLUDE_DIRECTORIES(
-    ${CMAKE_SOURCE_DIR}/src/core
-    ${QT_INCLUDE_DIR}
+	${CMAKE_SOURCE_DIR}/src/core
+	${Qt5Core_INCLUDE_DIRS}
 )
 
 ADD_LIBRARY(libdxfrw STATIC
