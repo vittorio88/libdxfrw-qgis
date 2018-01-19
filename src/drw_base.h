@@ -38,12 +38,6 @@
 #  define DRW_POSIX
 #endif
 
-#ifndef M_PI
-#define M_PI   3.141592653589793238462643
-#endif
-#ifndef M_PI_2
-#define M_PI_2 1.57079632679489661923
-#endif
 #define M_PIx2 6.283185307179586 // 2*PI
 #define ARAD 57.29577951308232
 
@@ -68,33 +62,33 @@ namespace DRW
 //! Version numbers for the DXF Format.
   enum Version
   {
-    UNKNOWNV,     /*!< UNKNOWN VERSION. */
-    AC1006,       /*!< R10. */
-    AC1009,       /*!< R11 & R12. */
-    AC1012,       /*!< R13. */
-    AC1014,       /*!< R14. */
-    AC1015,       /*!< ACAD 2000. */
-    AC1018,       /*!< ACAD 2004. */
-    AC1021,       /*!< ACAD 2007. */
-    AC1024,       /*!< ACAD 2010. */
-    AC1027        /*!< ACAD 2013. */
+    UNKNOWNV,     //!< UNKNOWN VERSION.
+    AC1006,       //!< R10.
+    AC1009,       //!< R11 & R12.
+    AC1012,       //!< R13.
+    AC1014,       //!< R14.
+    AC1015,       //!< ACAD 2000.
+    AC1018,       //!< ACAD 2004.
+    AC1021,       //!< ACAD 2007.
+    AC1024,       //!< ACAD 2010.
+    AC1027        //!< ACAD 2013.
   };
 
   enum error
   {
-    BAD_NONE,             /*!< No error. */
-    BAD_UNKNOWN,          /*!< UNKNOWN. */
-    BAD_OPEN,             /*!< error opening file. */
-    BAD_VERSION,          /*!< unsupported version. */
-    BAD_READ_METADATA,    /*!< error reading matadata. */
-    BAD_READ_FILE_HEADER, /*!< error in file header read process. */
-    BAD_READ_HEADER,      /*!< error in header vars read process. */
-    BAD_READ_HANDLES,     /*!< error in object map read process. */
-    BAD_READ_CLASSES,     /*!< error in classes read process. */
-    BAD_READ_TABLES,      /*!< error in tables read process. */
-    BAD_READ_BLOCKS,      /*!< error in block read process. */
-    BAD_READ_ENTITIES,    /*!< error in entities read process. */
-    BAD_READ_OBJECTS      /*!< error in objects read process. */
+    BAD_NONE,             //!< No error.
+    BAD_UNKNOWN,          //!< UNKNOWN.
+    BAD_OPEN,             //!< Error opening file.
+    BAD_VERSION,          //!< Unsupported version.
+    BAD_READ_METADATA,    //!< Error reading matadata.
+    BAD_READ_FILE_HEADER, //!< Error in file header read process.
+    BAD_READ_HEADER,      //!< Error in header vars read process.
+    BAD_READ_HANDLES,     //!< Error in object map read process.
+    BAD_READ_CLASSES,     //!< Error in classes read process.
+    BAD_READ_TABLES,      //!< Error in tables read process.
+    BAD_READ_BLOCKS,      //!< Error in block read process.
+    BAD_READ_ENTITIES,    //!< Error in entities read process.
+    BAD_READ_OBJECTS      //!< Error in objects read process.
   };
 
   enum DBG_LEVEL
@@ -126,7 +120,7 @@ namespace DRW
   //! Shadow mode
   enum ShadowMode
   {
-    CastAndReceieveShadows = 0,
+    CastAndReceiveShadows = 0,
     CastShadows = 1,
     ReceiveShadows = 2,
     IgnoreShadows = 3
@@ -164,18 +158,11 @@ class DRW_Coord
     DRW_Coord(): x( 0 ), y( 0 ), z( 0 ) {}
     DRW_Coord( double ix, double iy, double iz ): x( ix ), y( iy ), z( iz ) {}
 
-    DRW_Coord& operator = ( const DRW_Coord& data )
-    {
-      x = data.x;
-      y = data.y;
-      z = data.z;
-      return *this;
-    }
-    /** < convert to unitary vector */
+    //! < convert to unitary vector
     void unitize()
     {
       double dist;
-      dist = sqrt( x * x + y * y + z * z );
+      dist = std::sqrt( x * x + y * y + z * z );
       if ( dist > 0.0 )
       {
         x = x / dist;
@@ -204,11 +191,11 @@ class DRW_Vertex2D
     DRW_Vertex2D( double sx, double sy, double b ): x( sx ), y( sy ), stawidth( 0 ), endwidth( 0 ), bulge( b ) {}
 
   public:
-    double x;         /*!< x coordinate, code 10 */
-    double y;         /*!< y coordinate, code 20 */
-    double stawidth;  /*!< Start width, code 40 */
-    double endwidth;  /*!< End width, code 41 */
-    double bulge;     /*!< bulge, code 42 */
+    double x;         //!< X coordinate, code 10
+    double y;         //!< Y coordinate, code 20
+    double stawidth;  //!< Start width, code 40
+    double endwidth;  //!< End width, code 41
+    double bulge;     //!< Bulge, code 42
 };
 
 
@@ -241,7 +228,7 @@ class DRW_Variant
 
     DRW_Variant( int c, DRW_Coord crd ): sdata( std::string() ), vdata( crd ), content( &vdata ), vType( COORD ), vCode( c ) {}
 
-    DRW_Variant( const DRW_Variant& d ): sdata( d.sdata ), vdata( d.vdata ), content( d.content ), vType( d.vType ), vCode( d.vCode )
+    DRW_Variant( const DRW_Variant &d ): sdata( d.sdata ), vdata( d.vdata ), content( d.content ), vType( d.vType ), vCode( d.vCode )
     {
       if ( d.vType == COORD )
         content.v = &vdata;
@@ -261,7 +248,7 @@ class DRW_Variant
     void setCoordY( double d ) { if ( vType == COORD ) vdata.y = d;}
     void setCoordZ( double d ) { if ( vType == COORD ) vdata.z = d;}
     enum TYPE type() { return vType;}
-    int code() { return vCode;}            /*!< returns dxf code of this value*/
+    int code() { return vCode;}            //!< Returns dxf code of this value
 
   private:
     std::string sdata;
@@ -270,10 +257,10 @@ class DRW_Variant
   private:
     union DRW_VarContent
     {
-      UTF8STRING *s;
+      UTF8STRING *s; //skip-init-check
       dint32 i;
       double d;
-      DRW_Coord *v;
+      DRW_Coord *v; //skip-init-check
 
       DRW_VarContent( UTF8STRING *sd ): s( sd ) {}
       DRW_VarContent( dint32 id ): i( id ) {}
@@ -285,7 +272,7 @@ class DRW_Variant
     DRW_VarContent content;
   private:
     enum TYPE vType;
-    int vCode;            /*!< dxf code of this value*/
+    int vCode;            //!< Dxf code of this value
 
 };
 
@@ -317,33 +304,33 @@ class DRW_LW_Conv
   public:
     enum lineWidth
     {
-      width00 = 0,       /*!< 0.00mm (dxf 0)*/
-      width01 = 1,       /*!< 0.05mm (dxf 5)*/
-      width02 = 2,       /*!< 0.09mm (dxf 9)*/
-      width03 = 3,       /*!< 0.13mm (dxf 13)*/
-      width04 = 4,       /*!< 0.15mm (dxf 15)*/
-      width05 = 5,       /*!< 0.18mm (dxf 18)*/
-      width06 = 6,       /*!< 0.20mm (dxf 20)*/
-      width07 = 7,       /*!< 0.25mm (dxf 25)*/
-      width08 = 8,       /*!< 0.30mm (dxf 30)*/
-      width09 = 9,       /*!< 0.35mm (dxf 35)*/
-      width10 = 10,      /*!< 0.40mm (dxf 40)*/
-      width11 = 11,      /*!< 0.50mm (dxf 50)*/
-      width12 = 12,      /*!< 0.53mm (dxf 53)*/
-      width13 = 13,      /*!< 0.60mm (dxf 60)*/
-      width14 = 14,      /*!< 0.70mm (dxf 70)*/
-      width15 = 15,      /*!< 0.80mm (dxf 80)*/
-      width16 = 16,      /*!< 0.90mm (dxf 90)*/
-      width17 = 17,      /*!< 1.00mm (dxf 100)*/
-      width18 = 18,      /*!< 1.06mm (dxf 106)*/
-      width19 = 19,      /*!< 1.20mm (dxf 120)*/
-      width20 = 20,      /*!< 1.40mm (dxf 140)*/
-      width21 = 21,      /*!< 1.58mm (dxf 158)*/
-      width22 = 22,      /*!< 2.00mm (dxf 200)*/
-      width23 = 23,      /*!< 2.11mm (dxf 211)*/
-      widthByLayer = 29, /*!< by layer (dxf -1) */
-      widthByBlock = 30, /*!< by block (dxf -2) */
-      widthDefault = 31  /*!< by default (dxf -3) */
+      width00 = 0,       //!< 0.00mm (dxf 0)
+      width01 = 1,       //!< 0.05mm (dxf 5)
+      width02 = 2,       //!< 0.09mm (dxf 9)
+      width03 = 3,       //!< 0.13mm (dxf 13)
+      width04 = 4,       //!< 0.15mm (dxf 15)
+      width05 = 5,       //!< 0.18mm (dxf 18)
+      width06 = 6,       //!< 0.20mm (dxf 20)
+      width07 = 7,       //!< 0.25mm (dxf 25)
+      width08 = 8,       //!< 0.30mm (dxf 30)
+      width09 = 9,       //!< 0.35mm (dxf 35)
+      width10 = 10,      //!< 0.40mm (dxf 40)
+      width11 = 11,      //!< 0.50mm (dxf 50)
+      width12 = 12,      //!< 0.53mm (dxf 53)
+      width13 = 13,      //!< 0.60mm (dxf 60)
+      width14 = 14,      //!< 0.70mm (dxf 70)
+      width15 = 15,      //!< 0.80mm (dxf 80)
+      width16 = 16,      //!< 0.90mm (dxf 90)
+      width17 = 17,      //!< 1.00mm (dxf 100)
+      width18 = 18,      //!< 1.06mm (dxf 106)
+      width19 = 19,      //!< 1.20mm (dxf 120)
+      width20 = 20,      //!< 1.40mm (dxf 140)
+      width21 = 21,      //!< 1.58mm (dxf 158)
+      width22 = 22,      //!< 2.00mm (dxf 200)
+      width23 = 23,      //!< 2.11mm (dxf 211)
+      widthByLayer = 29, //!< By layer (dxf -1)
+      widthByBlock = 30, //!< By block (dxf -2)
+      widthDefault = 31  //!< By default (dxf -3)
     };
 
     static int lineWidth2dxfInt( enum lineWidth lw )
@@ -528,7 +515,7 @@ class DRW_LW_Conv
 
     static enum lineWidth dwgInt2lineWidth( int i )
     {
-      if (( i > -1 && i < 24 ) || ( i > 28 && i < 32 ) )
+      if ( ( i > -1 && i < 24 ) || ( i > 28 && i < 32 ) )
       {
         return static_cast<lineWidth>( i );
       }
